@@ -1533,6 +1533,8 @@ JunDXFParser >> newDxfDefinition: aString [
 	blocks at: 'LINE' put: #parseLINE.
 	blocks at: 'ARC' put: #parseARC.
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
+	self flag: #TT_TODO. "Add support for parsing TEXT entities (needed for ASTM)"
+
 	definedObjects := OrderedCollection new: 10.
 	[dataString = 'ENDBLK']
 		whileFalse: 
