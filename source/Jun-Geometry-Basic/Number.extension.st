@@ -13,11 +13,6 @@ Number >> asDegrees [
 ]
 
 { #category : #'*Jun-Geometry-Basic' }
-Number >> asDouble [ 
-	^ self asFloat
-]
-
-{ #category : #'*Jun-Geometry-Basic' }
 Number >> asRadians [ 
 	^JunAngle radians: self
 ]

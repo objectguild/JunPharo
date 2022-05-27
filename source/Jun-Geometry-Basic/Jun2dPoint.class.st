@@ -8,9 +8,6 @@ Class {
 		'x',
 		'y'
 	],
-	#classInstVars : [
-		'enhancements'
-	],
 	#category : #'Jun-Geometry-Basic'
 }
 
@@ -108,34 +105,6 @@ Jun2dPoint class >> fromTable: aTable for: aPoint [
 	^aPoint
 ]
 
-{ #category : #'class initialization' }
-Jun2dPoint class >> install [
-	"Jun2dPoint install."
-
-	self installEnhancements
-]
-
-{ #category : #enhancements }
-Jun2dPoint class >> installEnhancements [
-	"Jun2dPoint installEnhancements."
-
-	| classified |
-
-	classified := '*' , self class category.
-
-	Number 
-		compile: ', aNumber 
-	^Jun2dPoint
-		x: self
-		y: aNumber' 
-		classified: classified.
-	
-	Number 
-		compile: 'asDouble 
-	^ self asFloat' 
-		classified: classified
-]
-
 { #category : #utilities }
 Jun2dPoint class >> neighborhood24Points: aPoint [ 
 	"Jun2dPoint neighborhood24Points: Point zero."
@@ -187,12 +156,6 @@ Jun2dPoint class >> neighborhoodPoints: aPoint [
 	^self neighborhood8Points: aPoint
 ]
 
-{ #category : #'class initialization' }
-Jun2dPoint class >> obsolete [
-	self uninstall.
-	super obsolete
-]
-
 { #category : #'instance creation' }
 Jun2dPoint class >> rho: rho theta: theta [ 
 	^self x: rho * theta cos y: rho * theta sin
@@ -201,56 +164,6 @@ Jun2dPoint class >> rho: rho theta: theta [
 { #category : #copyright }
 Jun2dPoint class >> system [
 	^'Jun'
-]
-
-{ #category : #'class initialization' }
-Jun2dPoint class >> uninstall [
-	"Jun2dPoint uninstall."
-
-	self uninstallEnhancements
-]
-
-{ #category : #enhancements }
-Jun2dPoint class >> uninstallEnhanceClass: aClass selector: aSelector [ 
-	| anArray aProtocol oldCode |
-	aClass isBehavior ifFalse: [^self].
-	(aSelector isKindOf: Symbol)
-		ifFalse: [^self].
-	enhancements isNil ifTrue: [^self].
-	anArray := enhancements
-				detect: 
-					[:array | 
-					| bool |
-					bool := aClass name asString = (array at: 1).
-					bool := bool and: [aSelector = (array at: 3)].
-					bool yourself]
-				ifNone: [nil].
-	anArray isNil ifTrue: [^self].
-	aProtocol := anArray at: 2.
-	oldCode := anArray at: 4.
-	oldCode isNil
-		ifTrue: ["remove method"
-			aClass removeSelector: aSelector]
-		ifFalse: ["restore method"
-			aClass compile: oldCode classified: aProtocol].
-	enhancements remove: anArray
-]
-
-{ #category : #enhancements }
-Jun2dPoint class >> uninstallEnhancements [
-	"Jun2dPoint uninstallEnhancements."
-
-	| aClass aSelector |
-	enhancements notNil
-		ifTrue: 
-			[enhancements copy
-				do: 
-					[:anArray | 
-					aClass := Compiler evaluate: (anArray at: 1)
-								logged: false.
-					aSelector := anArray at: 3.
-					self uninstallEnhanceClass: aClass selector: aSelector].
-			enhancements := nil]
 ]
 
 { #category : #'constants access' }

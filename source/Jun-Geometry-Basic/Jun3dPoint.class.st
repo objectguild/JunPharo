@@ -9,9 +9,6 @@ Class {
 		'y',
 		'z'
 	],
-	#classInstVars : [
-		'enhancements'
-	],
 	#category : #'Jun-Geometry-Basic'
 }
 
@@ -182,26 +179,6 @@ Jun3dPoint class >> fromTable: aTable for: aPoint [
 	^aPoint
 ]
 
-{ #category : #'class initialization' }
-Jun3dPoint class >> install [
-	"Jun3dPoint install."
-
-	self installEnhancements
-]
-
-{ #category : #enhancements }
-Jun3dPoint class >> installEnhancements [
-	"Jun3dPoint installEnhancements."
-
-	Point 
-		compile: ', aNumber 
-	^Jun3dPoint
-		x: self x
-		y: self y
-		z: aNumber' 
-		classified: '*' , self class category
-]
-
 { #category : #utilities }
 Jun3dPoint class >> neighborhood124Points: aPoint [ 
 	"Jun3dPoint neighborhood124Points: Jun3dPoint zero."
@@ -285,12 +262,6 @@ Jun3dPoint class >> neighborhoodPoints: aPoint [
 	^self neighborhood26Points: aPoint
 ]
 
-{ #category : #'class initialization' }
-Jun3dPoint class >> obsolete [
-	self uninstall.
-	super obsolete
-]
-
 { #category : #'instance creation' }
 Jun3dPoint class >> rho: rho phi: phi theta: theta [ 
 	^self
@@ -302,56 +273,6 @@ Jun3dPoint class >> rho: rho phi: phi theta: theta [
 { #category : #copyright }
 Jun3dPoint class >> system [
 	^'Jun'
-]
-
-{ #category : #'class initialization' }
-Jun3dPoint class >> uninstall [
-	"Jun3dPoint uninstall."
-
-	self uninstallEnhancements
-]
-
-{ #category : #enhancements }
-Jun3dPoint class >> uninstallEnhanceClass: aClass selector: aSelector [ 
-	| anArray aProtocol oldCode |
-	aClass isBehavior ifFalse: [^self].
-	(aSelector isKindOf: Symbol)
-		ifFalse: [^self].
-	enhancements isNil ifTrue: [^self].
-	anArray := enhancements
-				detect: 
-					[:array | 
-					| bool |
-					bool := aClass name asString = (array at: 1).
-					bool := bool and: [aSelector = (array at: 3)].
-					bool yourself]
-				ifNone: [nil].
-	anArray isNil ifTrue: [^self].
-	aProtocol := anArray at: 2.
-	oldCode := anArray at: 4.
-	oldCode isNil
-		ifTrue: ["remove method"
-			aClass removeSelector: aSelector]
-		ifFalse: ["restore method"
-			aClass compile: oldCode classified: aProtocol].
-	enhancements remove: anArray
-]
-
-{ #category : #enhancements }
-Jun3dPoint class >> uninstallEnhancements [
-	"Jun3dPoint uninstallEnhancements."
-
-	| aClass aSelector |
-	enhancements notNil
-		ifTrue: 
-			[enhancements copy
-				do: 
-					[:anArray | 
-					aClass := Compiler evaluate: (anArray at: 1)
-								logged: false.
-					aSelector := anArray at: 3.
-					self uninstallEnhanceClass: aClass selector: aSelector].
-			enhancements := nil]
 ]
 
 { #category : #'constants access' }

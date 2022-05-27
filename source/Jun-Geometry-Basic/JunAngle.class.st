@@ -11,9 +11,6 @@ Class {
 		'cos',
 		'tan'
 	],
-	#classInstVars : [
-		'enhancements'
-	],
 	#category : #'Jun-Geometry-Basic'
 }
 
@@ -87,38 +84,6 @@ JunAngle class >> halfPi [
 	^self fromRad: super halfPi
 ]
 
-{ #category : #'class initialization' }
-JunAngle class >> install [
-	"JunAngle install."
-
-	self installEnhancements
-]
-
-{ #category : #enhancements }
-JunAngle class >> installEnhancements [
-	"JunAngle installEnhancements."
-
-	| classified |
-
-	classified := '*' , self class category.
-
-	Number 
-		compile: 'asDegrees 
-	^JunAngle degrees: self' 
-		classified: classified.
-
-	Number 
-		compile: 'asRadians 
-	^JunAngle radians: self' 
-		classified: classified
-]
-
-{ #category : #'class initialization' }
-JunAngle class >> obsolete [
-	self uninstall.
-	super obsolete
-]
-
 { #category : #'constants access' }
 JunAngle class >> pi [
 	"JunAngle pi."
@@ -149,56 +114,6 @@ JunAngle class >> radiansFromTable: aTable for: anAngle [
 { #category : #copyright }
 JunAngle class >> system [
 	^'Jun'
-]
-
-{ #category : #'class initialization' }
-JunAngle class >> uninstall [
-	"JunAngle uninstall."
-
-	self uninstallEnhancements
-]
-
-{ #category : #enhancements }
-JunAngle class >> uninstallEnhanceClass: aClass selector: aSelector [ 
-	| anArray aProtocol oldCode |
-	aClass isBehavior ifFalse: [^self].
-	(aSelector isKindOf: Symbol) ifFalse: [^self].
-	enhancements isNil ifTrue: [^self].
-	anArray := enhancements detect: 
-					[:array | 
-					| bool |
-					bool := aClass name asString = (array at: 1).
-					bool := bool and: [aSelector = (array at: 3)].
-					bool yourself]
-				ifNone: [nil].
-	anArray isNil ifTrue: [^self].
-	aProtocol := anArray at: 2.
-	oldCode := anArray at: 4.
-	oldCode isNil 
-		ifTrue: 
-			["remove method"
-
-			aClass removeSelector: aSelector]
-		ifFalse: 
-			["restore method"
-
-			aClass compile: oldCode classified: aProtocol].
-	enhancements remove: anArray
-]
-
-{ #category : #enhancements }
-JunAngle class >> uninstallEnhancements [
-	"JunAngle uninstallEnhancements."
-
-	| aClass aSelector |
-	enhancements notNil 
-		ifTrue: 
-			[enhancements copy do: 
-					[:anArray | 
-					aClass := Compiler evaluate: (anArray at: 1) logged: false.
-					aSelector := anArray at: 3.
-					self uninstallEnhanceClass: aClass selector: aSelector].
-			enhancements := nil]
 ]
 
 { #category : #'constants access' }
