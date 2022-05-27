@@ -235,10 +235,10 @@ JunDXFScanner >> nextPair [
 	lines := lines + 1.
 	dataKey := dataKey select: [:x | x isDigit].
 	groupCode := dataKey asNumber.
-	dataString := source upTo: self  lineSeparator.
+	dataString := (source upTo: self lineSeparator) trimLeft.
 	lines := lines + 1.
 	(groupCode > 9 and: [groupCode < 100])
-		ifTrue: [dataNumber := dataString trimLeft asNumber].
+		ifTrue: [dataNumber := dataString asNumber].
 	^dataKey -> dataString
 ]
 
