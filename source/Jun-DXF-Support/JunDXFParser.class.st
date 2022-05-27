@@ -1696,7 +1696,7 @@ JunDXFParser >> parseBlock [
 	[groupCode = 0 and: [dataString = 'ENDBLK']]
 		whileFalse: 
 			[self nextPair.
-			(groupCode = 3 and: [dataString first ~= $$])
+			((groupCode = 2 | groupCode = 3) and: [dataString first ~= $$])
 				ifTrue: [self newDxfDefinition: dataString]].
 	^true
 ]
@@ -1865,7 +1865,7 @@ JunDXFParser >> parseEXTMINMAX [
 JunDXFParser >> parseEntities [
 	| rc blocks |
 	self debug: 'parseEntities '.
-	blocks := Dictionary new: 5.
+	blocks := Dictionary new: 6.
 	blocks at: 'POLYLINE' put: #parsePOLYLINE.
 	blocks at: 'LINE' put: #parseLINE.
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
