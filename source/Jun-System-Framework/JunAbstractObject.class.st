@@ -38,21 +38,6 @@ JunAbstractObject class >> defaultBaseName [
 	^JunSystem defaultBaseName
 ]
 
-{ #category : #defaults }
-JunAbstractObject class >> defaultLispConsClass [
-	^JunLispCons
-]
-
-{ #category : #defaults }
-JunAbstractObject class >> defaultLispNilClass [
-	^JunLispNil
-]
-
-{ #category : #defaults }
-JunAbstractObject class >> defaultLispParserClass [
-	^JunLispParser
-]
-
 { #category : #evaluating }
 JunAbstractObject class >> do: aBlock during: millisecondTime [ 
 	^JunControlUtility do: aBlock during: millisecondTime
