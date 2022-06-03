@@ -1698,7 +1698,7 @@ JunDXFParser >> parseBlock [
 	[groupCode = 0 and: [dataString = 'ENDBLK']]
 		whileFalse: 
 			[self nextPair.
-			((groupCode = 2 | groupCode = 3) and: [dataString first ~= $$])
+			((groupCode = 2) | (groupCode = 3) and: [dataString first ~= $$])
 				ifTrue: [self newDxfDefinition: dataString]].
 	^true
 ]
