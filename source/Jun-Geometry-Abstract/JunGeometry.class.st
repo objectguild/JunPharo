@@ -130,6 +130,34 @@ JunGeometry class >> localGeometryClass [
 ]
 
 { #category : #utilities }
+JunGeometry class >> mobiusRadius: mobiusRadius normalizedTheta: normalizedTheta stripRadius: stripRadius normalizedRadius: normalizedRadius [ 
+	"JunGeometry mobiusRadius: (2/3) normalizedTheta: 0 stripRadius: (1/3) normalizedRadius: 1."
+
+	"
+	x = (R + (r * cos(theta / 2))) * cos(theta) 
+	y = (R + (r * cos(theta / 2))) * sin(theta) 
+	z = r * sin(theta / 2)
+	"
+
+	| theta phi point center x y z |
+	theta := JunAngle fromRad: self doublePi * normalizedTheta.
+	phi := theta * 2.0d reciprocal.
+	x := (mobiusRadius + (stripRadius * phi cos)) * theta cos.
+	y := (mobiusRadius + (stripRadius * phi cos)) * theta sin.
+	z := stripRadius * phi sin.
+	x abs < self accuracy ifTrue: [x := 0.0d].
+	y abs < self accuracy ifTrue: [y := 0.0d].
+	z abs < self accuracy ifTrue: [z := 0.0d].
+	point := x , y , z.
+	x := mobiusRadius * theta cos.
+	y := mobiusRadius * theta sin.
+	x abs < self accuracy ifTrue: [x := 0.0d].
+	y abs < self accuracy ifTrue: [y := 0.0d].
+	center := x , y , 0.0d.
+	^(center to: point) atT: normalizedRadius
+]
+
+{ #category : #utilities }
 JunGeometry class >> permutations: sequenceableCollection [ 
 	"JunGeometry permutations: #(1 2 3 4)."
 
@@ -259,6 +287,29 @@ JunGeometry class >> system [
 	^'Jun'
 ]
 
+{ #category : #utilities }
+JunGeometry class >> torusRadius: torusRadius normalizedTheta: normalizedTheta tubeRadius: tubeRadius normalizedPhi: normalizedPhi [ 
+	"JunGeometry torusRadius: (2/3) normalizedTheta: 0 tubeRadius: (1/3) normalizedPhi: 0."
+
+	"
+	x = (R + (r * cos(phi))) * cos(theta) 
+	y = (R + (r * cos(phi))) * sin(theta) 
+	z = r * sin(phi)
+	"
+
+	| theta phi x y z point |
+	theta := JunAngle fromRad: self doublePi * normalizedTheta.
+	phi := JunAngle fromRad: self doublePi * normalizedPhi.
+	x := (torusRadius + (tubeRadius * phi cos)) * theta cos.
+	y := (torusRadius + (tubeRadius * phi cos)) * theta sin.
+	z := tubeRadius * phi sin.
+	x abs < self accuracy ifTrue: [x := 0.0d].
+	y abs < self accuracy ifTrue: [y := 0.0d].
+	z abs < self accuracy ifTrue: [z := 0.0d].
+	point := x , y , z.
+	^point
+]
+
 { #category : #'class access' }
 JunGeometry class >> transformationClass [
 	^self new transformationClass
@@ -287,6 +338,11 @@ JunGeometry >> = aGeometry [
 { #category : #'constants access' }
 JunGeometry >> accuracy [
 	^self class accuracy
+]
+
+{ #category : #'class access' }
+JunGeometry >> angleClass [
+	^JunAngle
 ]
 
 { #category : #accessing }
@@ -375,6 +431,17 @@ JunGeometry >> asJunOpenGL3dObjectWithPoints [
 ]
 
 { #category : #converting }
+JunGeometry >> asJunOpenGL3dPolylines [
+	"((0 , 0 , 0 box: 1 , 2 , 3) asJunOpenGL3dPolylines) show."
+
+	| aBody |
+	aBody := JunOpenGL3dCompoundObject new.
+	self asArrayOfLines 
+		do: [:aLine | aBody add: (JunOpenGL3dPolyline with: aLine first with: aLine last)].
+	^aBody
+]
+
+{ #category : #converting }
 JunGeometry >> asJunOpenGL3dPolylinesColor: colorValue [ 
 	"((0 , 0 , 0 box: 1 , 2 , 3) asJunOpenGL3dPolylinesColor: ColorValue red) show."
 
@@ -444,8 +511,29 @@ JunGeometry >> asLocalGeometryIn: aJunCoordinateSystem [
 	^self class localGeometryClass geometry: localGeometry coordinateSystem: aJunCoordinateSystem
 ]
 
+{ #category : #'class access' }
+JunGeometry >> boundingBallClass [
+	self is3d ifTrue: [^Jun3dBoundingBall].
+	self is2d ifTrue: [^Jun2dBoundingBall].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> boundingBallsClass [
+	self is3d ifTrue: [^Jun3dBoundingBalls].
+	self is2d ifTrue: [^Jun2dBoundingBalls].
+	^self subclassResponsibility
+]
+
 { #category : #accessing }
 JunGeometry >> boundingBox [
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> boundingBoxClass [
+	self is3d ifTrue: [^Jun3dBoundingBox].
+	self is2d ifTrue: [^Jun2dBoundingBox].
 	^self subclassResponsibility
 ]
 
@@ -460,6 +548,20 @@ JunGeometry >> boundingBoxNodeClass [
 JunGeometry >> boundingBoxTreeClass [
 	self is3d ifTrue: [^Jun3dBoundingBoxTree].
 	self is2d ifTrue: [^Jun2dBoundingBoxTree].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> boundingBoxesClass [
+	self is3d ifTrue: [^Jun3dBoundingBoxes].
+	self is2d ifTrue: [^Jun2dBoundingBoxes].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> circleClass [
+	self is3d ifTrue: [^Jun3dCircle].
+	self is2d ifTrue: [^Jun2dCircle].
 	^self subclassResponsibility
 ]
 
@@ -649,8 +751,41 @@ JunGeometry >> isTriangles [
 ]
 
 { #category : #'class access' }
+JunGeometry >> lineClass [
+	self is3d ifTrue: [^Jun3dLine].
+	self is2d ifTrue: [^Jun2dLine].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
 JunGeometry >> localGeometryClass [
 	^JunLocalGeometry
+]
+
+{ #category : #'class access' }
+JunGeometry >> planeClass [
+	^JunPlane
+]
+
+{ #category : #'class access' }
+JunGeometry >> pointClass [
+	self is3d ifTrue: [^Jun3dPoint].
+	self is2d ifTrue: [^Jun2dPoint].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> polygonClass [
+	self is3d ifTrue: [^Jun3dPolygon].
+	self is2d ifTrue: [^Jun2dPolygon].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> polylineClass [
+	self is3d ifTrue: [^Jun3dPolyline].
+	self is2d ifTrue: [^Jun2dPolyline].
+	^self subclassResponsibility
 ]
 
 { #category : #printing }
@@ -661,6 +796,12 @@ JunGeometry >> printOn: aStream [
 { #category : #transforming }
 JunGeometry >> rotatedBy: anAngle [ 
 	^self transform: (self transformationClass rotate: anAngle)
+]
+
+{ #category : #transforming }
+JunGeometry >> rotatedByDegrees: degrees [ 
+	^self 
+		transform: (self transformationClass rotate: (JunAngle fromDeg: degrees))
 ]
 
 { #category : #transforming }
@@ -771,6 +912,21 @@ JunGeometry >> showProjectionTable: aDictionary in: aRectangle [
 ]
 
 { #category : #viewing }
+JunGeometry >> showWithArrows [
+	"(0 , 0 box: 1 , 1) showWithArrows."
+
+	"(0 , 0 , 0 box: 1 , 1 , 1) showWithArrows."
+
+	| arrowObject |
+	self is2d 
+		ifTrue: [arrowObject := JunOpenGL3dObject xyArrows]
+		ifFalse: [arrowObject := JunOpenGL3dObject xyzArrows].
+	^((self asJunOpenGL3dObject asCompoundObject)
+		add: arrowObject;
+		yourself) show
+]
+
+{ #category : #viewing }
 JunGeometry >> showWithAxes [
 	"(1 , 1 , 1 cylinder: 1 height: 2) showWithAxes."
 
@@ -785,10 +941,30 @@ JunGeometry >> showWithTranslatedAxes [
 ]
 
 { #category : #viewing }
+JunGeometry >> showWithUnitArrows [
+	"(0 , 0 box: 1 , 1) showWithUnitArrows."
+
+	"(0 , 0 , 0 box: 1 , 1 , 1) showWithUnitArrows."
+
+	| arrowObject |
+	self is2d 
+		ifTrue: [arrowObject := JunOpenGL3dObject xyUnitArrows]
+		ifFalse: [arrowObject := JunOpenGL3dObject xyzUnitArrows].
+	^((self asJunOpenGL3dObject asCompoundObject)
+		add: arrowObject;
+		yourself) show
+]
+
+{ #category : #viewing }
 JunGeometry >> showWithUnitAxes [
 	"(1 , 1 , 1 cylinder: 1 height: 2) showWithUnitAxes."
 
 	^self asJunOpenGL3dObject showWithUnitAxes
+]
+
+{ #category : #'class access' }
+JunGeometry >> sphereClass [
+	^JunSphere
 ]
 
 { #category : #printing }
@@ -810,9 +986,30 @@ JunGeometry >> transform: aTransformation [
 	^self subclassResponsibility
 ]
 
+{ #category : #'class access' }
+JunGeometry >> transformationClass [
+	self is3d ifTrue: [^Jun3dTransformation].
+	self is2d ifTrue: [^Jun2dTransformation].
+	^self subclassResponsibility
+]
+
 { #category : #transforming }
 JunGeometry >> translatedBy: aPoint [ 
 	^self transform: (self transformationClass translate: aPoint)
+]
+
+{ #category : #'class access' }
+JunGeometry >> triangleClass [
+	self is3d ifTrue: [^Jun3dTriangle].
+	self is2d ifTrue: [^Jun2dTriangle].
+	^self subclassResponsibility
+]
+
+{ #category : #'class access' }
+JunGeometry >> trianglesClass [
+	self is3d ifTrue: [^Jun3dTriangles].
+	self is2d ifTrue: [^Jun2dTriangles].
+	^self subclassResponsibility
 ]
 
 { #category : #accessing }

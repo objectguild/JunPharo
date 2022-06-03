@@ -14,6 +14,13 @@ Class {
 	#category : #'Jun-System-Framework'
 }
 
+{ #category : #utilities }
+JunApplicationModel class >> alignedRectangleWithScreenCenter: extentPoint [ 
+	"JunApplicationModel alignedRectangleWithScreenCenter: 400 @ 300."
+
+	^(Jun2dPoint coerce: extentPoint) alignedRectangleWithScreenCenter
+]
+
 { #category : #evaluating }
 JunApplicationModel class >> assert: assertBlock do: doBlock ensure: ensureBlock [ 
 	^JunControlUtility 
@@ -48,6 +55,21 @@ JunApplicationModel class >> debug: aBlock [
 { #category : #defaults }
 JunApplicationModel class >> defaultBaseName [
 	^JunSystem defaultBaseName
+]
+
+{ #category : #defaults }
+JunApplicationModel class >> defaultLispConsClass [
+	^JunLispCons
+]
+
+{ #category : #defaults }
+JunApplicationModel class >> defaultLispNilClass [
+	^JunLispNil
+]
+
+{ #category : #defaults }
+JunApplicationModel class >> defaultLispParserClass [
+	^JunLispParser
 ]
 
 { #category : #utilities }
@@ -1093,6 +1115,11 @@ JunApplicationModel >> menuItemLabeled: aString inMenu: aMenu ifNone: exceptionB
 		menuItemLabeled: aString
 		inMenu: aMenu
 		ifNone: exceptionBlock
+]
+
+{ #category : #private }
+JunApplicationModel >> neighborhoodPoints: displayPoint [ 
+	^JunPoint neighborhoodPoints: displayPoint
 ]
 
 { #category : #'menu messages' }
