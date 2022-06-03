@@ -22,7 +22,7 @@ BaselineOfJunPharo >> baseline: spec [
 			package: 'Jun-Geometry-Abstract' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
 			package: 'Jun-Geometry-Basic' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Boundaries' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Curves' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Forms' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
+			package: 'Jun-Geometry-Curves' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Forms' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Basic' 'Jun-Geometry-Curves' 'Jun-Geometry-Surfaces' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Pluralities' ;
 			package: 'Jun-Geometry-Solid' ;
@@ -33,7 +33,7 @@ BaselineOfJunPharo >> baseline: spec [
 			package: 'Jun-OpenGL-Display' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Basic' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-OpenGL-Objects' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Hash' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-Geometry-Basic' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Forms' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-OpenGL-Display' ) ] ;
 			package: 'Jun-Pharo' ;
-			package: 'Jun-System-Framework' with: [ spec requires: #( 'Jun-Geometry-Basic' 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-Pharo' ) ].
+			package: 'Jun-System-Framework' with: [ spec requires: #( 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-Pharo' ) ].
 
 		"Groups"
 		spec 
