@@ -21,7 +21,7 @@ BaselineOfJunPharo >> baseline: spec [
 			package: 'Jun-DXF-Support' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Abstract' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
 			package: 'Jun-Geometry-Basic' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Boundaries' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
+			package: 'Jun-Geometry-Boundaries' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Curves' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Forms' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Forms' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Basic' 'Jun-Geometry-Curves' 'Jun-Geometry-Surfaces' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Pluralities' ;
