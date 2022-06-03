@@ -10,8 +10,6 @@ BaselineOfJunPharo >> baseline: spec [
 
 	spec for: #common do: [ 
 
-		spec postLoadDoIt: #postload:package:.
-
 		"Dependencies"
 
 		"Packages"
