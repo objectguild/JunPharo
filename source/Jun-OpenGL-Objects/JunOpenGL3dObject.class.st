@@ -38468,12 +38468,11 @@ JunOpenGL3dObject >> primitivesDo: aBlock [
 
 { #category : #printing }
 JunOpenGL3dObject >> printOn: aStream [ 
-	| title |
-	title := self class name.
-	aStream nextPutAll: ((title at: 1) isVowel
-			ifTrue: ['an ']
-			ifFalse: ['a ']).
-	aStream nextPutAll: title
+
+	aStream 
+		nextPutAll: self kindName printString ; 
+		nextPutAll: ': ' ; 
+		nextPutAll: self name
 ]
 
 { #category : #accessing }

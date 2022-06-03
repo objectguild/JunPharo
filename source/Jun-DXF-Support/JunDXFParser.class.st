@@ -1533,7 +1533,7 @@ JunDXFParser >> newDxfDefinition: aString [
 	blocks at: 'LINE' put: #parseLINE.
 	blocks at: 'ARC' put: #parseARC.
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
-	self flag: #TT_TODO. "Add support for parsing TEXT entities (needed for ASTM)"
+	blocks at: 'TEXT' put: #parseTEXT.
 
 	definedObjects := OrderedCollection new: 10.
 	[dataString = 'ENDBLK']
@@ -2089,6 +2089,51 @@ JunDXFParser >> parsePOLYLINE [
 	self count: #polyline.
 	self debug: 'parsePolyline returning happy ' , vertexes first printString.
 	^true
+]
+
+{ #category : #'parsing entities' }
+JunDXFParser >> parseTEXT [
+
+	"Create text object item.
+	
+	Needed for support of DXF-ASTM specification."
+
+	| x y z rotation styleName markName string height newItem |
+
+	x := y := z := 0.0.
+	rotation := 0.0.
+	styleName := 'STANDARD'.
+	self debug: 'parseTEXT ' , dataKey, '->', dataString, ' ', mark printString.
+	markName := mark printString.
+
+	[ 
+		self nextPair.
+		groupCode = 0
+	 ] whileFalse: [ 
+		groupCode = 1 ifTrue: [ string := dataString ].
+		groupCode = 7 ifTrue: [ styleName := dataString ].
+		groupCode = 8 ifTrue: [ layer := dataString ].
+		groupCode = 10 ifTrue: [ x := dataNumber ].
+		groupCode = 20 ifTrue: [ y := dataNumber ].
+		groupCode = 30 ifTrue: [ z := dataNumber ].
+		groupCode = 40 ifTrue: [ height := dataNumber ].
+		groupCode = 50 ifTrue: [ rotation := dataNumber ].
+	 ].
+
+	self debug: 'parseTEXT got ' , string.
+	newItem := JunOpenGL3dText new 
+		point: x , y , z ;
+		height: height ;
+		rotation: rotation ;
+		string: string ;
+		styleName: styleName ;
+		yourself.
+	self unNextPair.
+	newItem name: markName.
+	item := layer -> newItem.
+
+	self count: #text.
+	^ true
 ]
 
 { #category : #parsing }
