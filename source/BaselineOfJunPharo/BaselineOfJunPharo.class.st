@@ -17,23 +17,23 @@ BaselineOfJunPharo >> baseline: spec [
 		"Packages"
 		spec 
 			package: 'Jun-Collections-Hash' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
-			package: 'Jun-Collections-Sequences' with: [ spec requires: #( 'Jun-System-Framework'  ) ] ;
-			package: 'Jun-DXF-Support' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
+			package: 'Jun-Collections-Sequences' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-DXF-Support' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Basic' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-Geometry-Abstract' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
-			package: 'Jun-Geometry-Basic' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Boundaries' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Curves' 'Jun-Geometry-Solid' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Curves' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Forms' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Basic' 'Jun-Geometry-Curves' 'Jun-Geometry-Surfaces' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Geometry-Pluralities' ;
-			package: 'Jun-Geometry-Solid' ;
-			package: 'Jun-Geometry-Surfaces' ;
-			package: 'Jun-Geometry-Transformations' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-Geometry-Basic' 'Jun-Geometry-Curves' 'Jun-OpenGL-Display' 'Jun-OpenGL-Objects' ) ] ;
-			package: 'Jun-Goodies-Lisp' ;
-			package: 'Jun-Goodies-Tables' ;
-			package: 'Jun-OpenGL-Display' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Geometry-Abstract' 'Jun-Geometry-Basic' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-OpenGL-Objects' ) ] ;
+			package: 'Jun-Geometry-Basic' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Boundaries' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Curves' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Forms' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Pluralities' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Solid' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Surfaces' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Geometry-Transformations' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Goodies-Lisp' with: [ spec requires: #( 'Jun-System-Framework' ) ] ;
+			package: 'Jun-Goodies-Tables' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Goodies-Lisp' ) ] ;
+			package: 'Jun-OpenGL-Display' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-OpenGL-Objects' ) ] ;
 			package: 'Jun-OpenGL-Objects' with: [ spec requires: #( 'Jun-System-Framework' 'Jun-Collections-Hash' 'Jun-Collections-Sequences' 'Jun-Geometry-Abstract' 'Jun-Geometry-Basic' 'Jun-Geometry-Boundaries' 'Jun-Geometry-Curves' 'Jun-Geometry-Forms' 'Jun-Geometry-Surfaces' 'Jun-Geometry-Transformations' 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-OpenGL-Display' ) ] ;
 			package: 'Jun-Pharo' ;
-			package: 'Jun-System-Framework' with: [ spec requires: #( 'Jun-Goodies-Lisp' 'Jun-Goodies-Tables' 'Jun-Pharo' ) ].
+			package: 'Jun-System-Framework' with: [ spec requires: #( 'Jun-Pharo' ) ].
 
 		"Groups"
 		spec 
