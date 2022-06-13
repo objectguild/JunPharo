@@ -38469,10 +38469,11 @@ JunOpenGL3dObject >> primitivesDo: aBlock [
 { #category : #printing }
 JunOpenGL3dObject >> printOn: aStream [ 
 
-	aStream 
-		nextPutAll: self kindName printString ; 
-		nextPutAll: ': ' ; 
-		nextPutAll: self name
+	aStream nextPutAll: self kindName printString.
+	self name ifNotNil: [ :name | 
+		aStream 
+			nextPutAll: ': ' ; 
+			nextPutAll: name ]
 ]
 
 { #category : #accessing }
