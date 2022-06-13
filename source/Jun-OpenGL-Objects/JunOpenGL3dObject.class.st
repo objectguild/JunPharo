@@ -38326,7 +38326,8 @@ JunOpenGL3dObject >> legalName [
 
 { #category : #accessing }
 JunOpenGL3dObject >> name [
-	(self propertyAt: #name) ifNil: [^self defaultName] ifNotNil: [:it | ^it]
+
+	^ self propertyAt: #name
 ]
 
 { #category : #accessing }
