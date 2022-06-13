@@ -1528,7 +1528,7 @@ JunDXFParser >> newDxfDefinition: aString [
 	self debug: 'newDxfDefinition: ' , aString.
 	rc := false.
 	definedObjects := OrderedCollection new: 10.
-	blocks := Dictionary new: 4.
+	blocks := Dictionary new.
 	blocks at: 'POLYLINE' put: #parsePOLYLINE.
 	blocks at: 'LINE' put: #parseLINE.
 	blocks at: 'ARC' put: #parseARC.
@@ -1538,7 +1538,7 @@ JunDXFParser >> newDxfDefinition: aString [
 	"Added for TechTailors"
 	layeredObjects := Dictionary new.
 	"/Added"
-	definedObjects := OrderedCollection new: 10.
+	"definedObjects := OrderedCollection new: 10."
 	[dataString = 'ENDBLK']
 		whileFalse: 
 			[rc := false.
@@ -1551,7 +1551,7 @@ JunDXFParser >> newDxfDefinition: aString [
 					rc = true ifTrue: [rc = true ifTrue: [
 							"Added for TechTailors"
 							layeredObjects
-								at: (item key = '1' ifTrue: [ '666' ] ifFalse: [ item key ])
+								at: item key 
 								ifPresent: [ :value | value add: item value ]
 								ifAbsentPut: [ OrderedCollection with: item value ].
 							"/Added"
@@ -1559,10 +1559,14 @@ JunDXFParser >> newDxfDefinition: aString [
 	self debug: 'newDxfDefinition now adding: ' , aString , '  for: ' , definedObjects printString.
 	self count: #names.
 	newObject := JunOpenGL3dCompoundObject components: definedObjects.
+	newObject name: aString.
 	dxfNames at: aString put: newObject.
 	"Added for TechTailors"
-	layeredObjects keysAndValuesDo: [ :key :value |
-		self addLayeredItem: key -> (JunOpenGL3dCompoundObject components: value) ].
+	layeredObjects keysAndValuesDo: [ :key :value | "Note that value here is the collection created above"
+		| blockObject |
+		blockObject := JunOpenGL3dCompoundObject components: value.
+		blockObject reference: aString.
+		self addLayeredItem: key -> blockObject ].
 	"/Added"
 	^true
 ]
