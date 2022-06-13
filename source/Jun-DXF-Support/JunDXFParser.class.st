@@ -1933,13 +1933,13 @@ JunDXFParser >> parseHeader [
 JunDXFParser >> parseINSERT [
 	"answer a Polyline"
 
-	| x y z xScale yScale zScale angle extrudeX extrudeY extrudeZ defName newItem markName |
+	| x y z xScale yScale zScale angle extrudeX extrudeY extrudeZ defName newItem beginMark |
 	x := y := z := 0.0.
 	extrudeX := extrudeY := extrudeZ := 0.
 	xScale := yScale := zScale := 1.0.
 	self debug: 'parseINSERT  ' , dataKey , ' -> ' , dataString , ' ' , mark printString.
 	angle := 0.
-	markName := mark printString.
+	beginMark := mark.
 	
 	[self nextPair.
 	dataString = 'EOF'
@@ -1962,18 +1962,18 @@ JunDXFParser >> parseINSERT [
 			groupCode = 50 ifTrue: [angle := dataNumber]].
 	self debug: 'parseINSERT got ' , x printString , ' ' , y printString , ' ' , z printString , '  angle: ' , angle printString.
 	(dxfNames includesKey: defName)
-		ifFalse: [^failBlock value: 'parseINSERT missing definition name: ' , defName].
-	newItem := dxfNames at: defName.
-	newItem := newItem scaledBy: xScale , yScale , zScale.
-	angle = 0 ifFalse: [newItem := newItem rotatedBy: (JunAngle fromDeg: angle)].
-	newItem := newItem translatedBy: x , y , z.
-	(extrudeX ~= 0 or: [extrudeY ~= 0 or: [extrudeZ ~= 0]])
-		ifTrue: [newItem := self applyExtrusion: extrudeX , extrudeY , extrudeZ to: newItem].
+		ifFalse: [ ^ failBlock value: 'parseINSERT missing definition name: ' , defName ].
+	newItem := JunOpenGL3dReference object: (dxfNames at: defName).
+	newItem 
+		scale: xScale , yScale , zScale ;
+		rotation: angle ;
+		translation: x , y , z ;
+		extrusion: extrudeX , extrudeY , extrudeZ ;
+		mark: beginMark.
 	self unNextPair.
-	newItem name: markName.
 	item := layer -> newItem.
 	self count: #insert.
-	^true
+	^ true
 ]
 
 { #category : #'parsing entities' }
