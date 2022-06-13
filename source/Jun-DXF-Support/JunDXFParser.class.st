@@ -2225,7 +2225,7 @@ JunDXFParser >> setLayerColor: aName to: anInteger [
 { #category : #graphics }
 JunDXFParser >> setLayerNames [
 	self debug: 'setLayerNames '.
-	self layers keysAndValuesDo: [:name :obs | obs name: name].
+	self layers keysAndValuesDo: [:name :obs | obs name: 'Layer #' , name asString ].
 	^self
 ]
 
