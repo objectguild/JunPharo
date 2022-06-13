@@ -1612,9 +1612,9 @@ JunDXFParser >> parse [
 
 { #category : #'parsing entities' }
 JunDXFParser >> parse3DFACE [
-	| markName vertexes x1 y1 z1 x2 y2 z2 x3 y3 z3 x4 y4 z4 newItem isQuad |
+	| beginMark vertexes x1 y1 z1 x2 y2 z2 x3 y3 z3 x4 y4 z4 newItem isQuad |
 	self debug: 'parse3DFACE'.
-	markName := mark printString.
+	beginMark := mark.
 	layer := ''.
 	x1 := y1 := z1 := 0.0.
 	x2 := y2 := z2 := 0.0.
@@ -1659,7 +1659,7 @@ JunDXFParser >> parse3DFACE [
 	newItem := JunOpenGL3dPolygon vertexes: vertexes.
 	vertexes size timesRepeat: [self count: #vertex].
 	self unNextPair.
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #polygon.
 	self debug: 'parsePolygon returning happy ' , vertexes first printString.
@@ -1670,10 +1670,10 @@ JunDXFParser >> parse3DFACE [
 JunDXFParser >> parseARC [
 	"answer a Polyline"
 
-	| x y z r a1 a2 points newItem markName |
+	| x y z r a1 a2 points newItem beginMark |
 	x := y := z := 0.0.
 	self debug: 'parseARC  ' , dataKey , ' -> ' , dataString , ' ' , mark printString.
-	markName := mark printString.
+	beginMark := mark.
 	
 	[self nextPair.
 	dataString = 'EOF'
@@ -1700,7 +1700,7 @@ JunDXFParser >> parseARC [
 				to: a2.
 	newItem := JunOpenGL3dPolyline vertexes: points.
 	self unNextPair.
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #arc.
 	^true
@@ -1732,13 +1732,13 @@ JunDXFParser >> parseBlocks [
 JunDXFParser >> parseCIRCLE [
 	"answer a Jun3DPoint"
 
-	| x y z weights controls knots r newItem pi pi2 delta angle1 angle2 points xx nx ny markName |
+	| x y z weights controls knots r newItem pi pi2 delta angle1 angle2 points xx nx ny beginMark |
 	x := y := z := 0.0.
 	self debug: 'parseCIRCLE ' , dataKey , ' -> ' , dataString , ' ' , mark printString.
 	weights := #(1.0 0.707107 1.0 0.707107 1.0 0.707107 1.0 0.707107 1.0).
 	knots := #(0 0 0 1 1 2 2 3 3 4 4 4).
 	controls := OrderedCollection new: 9.
-	markName := mark printString.
+	beginMark := mark.
 	
 	[self nextPair.
 	dataString = 'EOF'
@@ -1787,7 +1787,7 @@ JunDXFParser >> parseCIRCLE [
 					xx := xx + delta].
 			newItem := (JunOpenGL3dPolyline vertexes: points)].
 	self unNextPair.
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #circle.
 	^true
@@ -2001,12 +2001,12 @@ JunDXFParser >> parseLINE [
 	line style 
 	line thickness..."
 
-	| x y z x2 y2 z2 color newItem markName |
+	| x y z x2 y2 z2 color newItem beginMark |
 	x := y := z := 0.0.
 	x2 := y2 := z2 := 0.0.
 	self debug: 'parseLINE ', dataKey, '->', dataString.
 	color := 0.
-	markName := mark printString.
+	beginMark := mark.
 	
 	[self nextPair.
 	"self debug: '  in parseLINE after nextPair ', dataKey, ' -> ', dataString, ' ', mark printString."
@@ -2029,7 +2029,7 @@ JunDXFParser >> parseLINE [
 	newItem := JunOpenGL3dPolyline vertexes: (Array with: x , y , z with: x2 , y2 , z2).
 	(color > 0) ifTrue:[ newItem paint: (self paintColor: color)].
 	self unNextPair.
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #line.
 	^true
@@ -2068,9 +2068,9 @@ JunDXFParser >> parsePOLYLINE [
 	polyline alpha: 0.75. 
 	polyline halftone: 0.3."
 
-	| vertexes rc isClosed newItem extrudeX extrudeY extrudeZ markName |
+	| vertexes rc isClosed newItem extrudeX extrudeY extrudeZ beginMark |
 	self debug: 'parsePOLYLINE'.
-	markName := mark printString.
+	beginMark := mark.
 	isClosed := false.
 	rc := false.
 	layer := ''.
@@ -2098,7 +2098,7 @@ JunDXFParser >> parsePOLYLINE [
 	(extrudeX ~= 0 or: [extrudeY ~= 0 or: [extrudeZ ~= 0]])
 		ifTrue: 
 			[newItem := self applyExtrusion: extrudeX , extrudeY , extrudeZ to: newItem].
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #polyline.
 	self debug: 'parsePolyline returning happy ' , vertexes first printString.
@@ -2112,13 +2112,13 @@ JunDXFParser >> parseTEXT [
 	
 	Needed for support of DXF-ASTM specification."
 
-	| x y z rotation styleName markName string height newItem |
+	| x y z rotation styleName beginMark string height newItem |
 
 	x := y := z := 0.0.
 	rotation := 0.0.
 	styleName := 'STANDARD'.
 	self debug: 'parseTEXT ' , dataKey, '->', dataString, ' ', mark printString.
-	markName := mark printString.
+	beginMark := mark.
 
 	[ 
 		self nextPair.
@@ -2143,7 +2143,7 @@ JunDXFParser >> parseTEXT [
 		styleName: styleName ;
 		yourself.
 	self unNextPair.
-	newItem name: markName.
+	newItem mark: beginMark.
 	item := layer -> newItem.
 
 	self count: #text.
