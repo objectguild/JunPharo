@@ -38325,6 +38325,12 @@ JunOpenGL3dObject >> legalName [
 ]
 
 { #category : #accessing }
+JunOpenGL3dObject >> mark: anInteger [
+
+	self propertyAt: #mark put: anInteger
+]
+
+{ #category : #accessing }
 JunOpenGL3dObject >> name [
 
 	^ self propertyAt: #name
@@ -38540,6 +38546,12 @@ JunOpenGL3dObject >> rawName [
 { #category : #private }
 JunOpenGL3dObject >> rawPaint [
 	^paint
+]
+
+{ #category : #accessing }
+JunOpenGL3dObject >> reference: aString [ 
+
+	self propertyAt: #reference put: aString
 ]
 
 { #category : #rendering }
