@@ -38423,6 +38423,21 @@ JunOpenGL3dObject >> polylinesDo: aBlock [
 	^self subclassResponsibility
 ]
 
+{ #category : #copying }
+JunOpenGL3dObject >> postCopy [
+
+	| oldProperties |
+
+	super postCopy.
+
+	"Manual copying to prevent missing JunLispCons class."
+
+	oldProperties := self properties.
+	self flushProperties.
+	oldProperties keysAndValuesDo: [ :key :value | 
+		self propertyAt: key put: value ]
+]
+
 { #category : #'bounds accessing' }
 JunOpenGL3dObject >> preferredBoundingBox [
 	| minX minY minZ maxX maxY maxZ |
