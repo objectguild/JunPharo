@@ -1881,14 +1881,16 @@ JunDXFParser >> parseEXTMINMAX [
 JunDXFParser >> parseEntities [
 	| rc blocks |
 	self debug: 'parseEntities '.
-	blocks := Dictionary new: 6.
+	blocks := Dictionary new.
 	blocks at: 'POLYLINE' put: #parsePOLYLINE.
 	blocks at: 'LINE' put: #parseLINE.
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
 	blocks at: 'ARC' put: #parseARC.
 	blocks at: 'INSERT' put: #parseINSERT.
 	blocks at: '3DFACE' put: #parse3DFACE.
-	definedObjects := OrderedCollection new: 10.
+	blocks at: 'TEXT' put: #parseTEXT.
+
+	"definedObjects := OrderedCollection new: 10."
 	"should have parse EXTMIN and EXTMAX by now, so calculate boundingBox"
 	self setBoundingBox.
 	[dataString = 'ENDSEC'] whileFalse: 
