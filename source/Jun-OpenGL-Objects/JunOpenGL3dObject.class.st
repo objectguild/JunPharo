@@ -38327,7 +38327,7 @@ JunOpenGL3dObject >> legalName [
 { #category : #accessing }
 JunOpenGL3dObject >> mark [
 
-	self propertyAt: #mark
+	^ self propertyAt: #mark
 ]
 
 { #category : #accessing }
