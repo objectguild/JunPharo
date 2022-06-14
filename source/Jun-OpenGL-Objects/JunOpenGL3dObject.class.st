@@ -38549,6 +38549,12 @@ JunOpenGL3dObject >> rawPaint [
 ]
 
 { #category : #accessing }
+JunOpenGL3dObject >> reference [
+
+	^ self propertyAt: #reference
+]
+
+{ #category : #accessing }
 JunOpenGL3dObject >> reference: aString [ 
 
 	self propertyAt: #reference put: aString
