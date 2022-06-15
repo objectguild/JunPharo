@@ -38314,6 +38314,18 @@ JunOpenGL3dObject >> isVertexesObject [
 ]
 
 { #category : #accessing }
+JunOpenGL3dObject >> layer [
+
+	^ self propertyAt: #layer
+]
+
+{ #category : #accessing }
+JunOpenGL3dObject >> layer: aString [
+
+	self propertyAt: #layer put: aString
+]
+
+{ #category : #accessing }
 JunOpenGL3dObject >> legalName [
 	| stream |
 	stream := WriteStream on: (String new: self name size).
