@@ -1366,14 +1366,18 @@ JunDXFParser class >> version [
 
 { #category : #graphics }
 JunDXFParser >> addLayeredItem: anItem [ 
-	| layerName layerItem |
+	| layerName layerItem namedLayer |
 	self debug: 'addLayeredItem ' , anItem key , '->' , anItem value printString.
 	layerName := anItem key.
 	layerItem := anItem value.
 	(layerItem isCompound and: [layerItem components isEmpty])
 		ifTrue: [self halt].
 	(layers includesKey: layerName)
-		ifFalse: [layers at: layerName put: JunOpenGL3dCompoundObject new].
+		ifFalse: [
+			namedLayer := JunOpenGL3dCompoundObject new
+				name: layerName ;
+				yourself.
+			layers at: layerName put: namedLayer ].
 	(self contained: layerItem)
 		ifTrue: [(layers at: layerName)
 				add: layerItem]
@@ -1524,7 +1528,7 @@ JunDXFParser >> layers [
 
 { #category : #parsing }
 JunDXFParser >> newDxfDefinition: aString [ 
-	| rc newObject blocks layeredObjects |
+	| rc newObject blocks |
 	self debug: 'newDxfDefinition: ' , aString.
 	rc := false.
 	definedObjects := OrderedCollection new: 10.
@@ -1535,9 +1539,6 @@ JunDXFParser >> newDxfDefinition: aString [
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
 	blocks at: 'TEXT' put: #parseTEXT.
 
-	"Added for TechTailors"
-	layeredObjects := Dictionary new.
-	"/Added"
 	"definedObjects := OrderedCollection new: 10."
 	[dataString = 'ENDBLK']
 		whileFalse: 
@@ -1549,11 +1550,8 @@ JunDXFParser >> newDxfDefinition: aString [
 					printString."
 					rc := self perform: (blocks at: dataString ifAbsent: [#yourself]).
 					rc = true ifTrue: [rc = true ifTrue: [
-							"Added for TechTailors"
-							layeredObjects
-								at: item key 
-								ifPresent: [ :value | value add: item value ]
-								ifAbsentPut: [ OrderedCollection with: item value ].
+							"Added for TechTailors (every defined item remembers its layer)"
+							item value layer: layer.
 							"/Added"
 							definedObjects add: item value]]]].
 	self debug: 'newDxfDefinition now adding: ' , aString , '  for: ' , definedObjects printString.
@@ -1561,13 +1559,6 @@ JunDXFParser >> newDxfDefinition: aString [
 	newObject := JunOpenGL3dCompoundObject components: definedObjects.
 	newObject name: aString.
 	dxfNames at: aString put: newObject.
-	"Added for TechTailors"
-	layeredObjects keysAndValuesDo: [ :key :value | "Note that value here is the collection created above"
-		| blockObject |
-		blockObject := JunOpenGL3dCompoundObject components: value.
-		blockObject reference: aString.
-		self addLayeredItem: key -> blockObject ].
-	"/Added"
 	^true
 ]
 
@@ -1608,7 +1599,7 @@ JunDXFParser >> parse [
 			rc := self perform: (blocks at: dataString ifAbsent: [#yourself]).
 			rc = true ifTrue: [self count: #sections]].
 	self showCounts.
-	self setLayerNames.
+	"self setLayerNames."	"No need to set the names anymore, is done in #addLayeredItem: directly during creation of the layer"
 	self updateLayerColors.
 	happy := true.
 	^self
@@ -1907,8 +1898,11 @@ JunDXFParser >> parseEntities [
 
 					rc := self perform: (blocks at: dataString ifAbsent: [#yourself]).
 					rc = true 
-						ifTrue: 
-							[self addLayeredItem: item.
+						ifTrue: [
+							"Added for TechTailors (every defined item remembers its layer)"
+							item value layer: layer.
+							"/Added"
+							self addLayeredItem: item.
 							self count: #entities]]].
 	self nextPair.
 	^true
@@ -2224,6 +2218,9 @@ JunDXFParser >> setLayerColor: aName to: anInteger [
 
 { #category : #graphics }
 JunDXFParser >> setLayerNames [
+
+	"This method is not used anymore. The name is already set during creation of the layer in #addLayeredItem:"
+
 	self debug: 'setLayerNames '.
 	self layers keysAndValuesDo: [:name :obs | obs name: name].
 	^self
