@@ -1538,6 +1538,7 @@ JunDXFParser >> newDxfDefinition: aString [
 	blocks at: 'ARC' put: #parseARC.
 	blocks at: 'CIRCLE' put: #parseCIRCLE.
 	blocks at: 'TEXT' put: #parseTEXT.
+	blocks at: 'POINT' put: #parsePOINT.
 
 	"definedObjects := OrderedCollection new: 10."
 	[dataString = 'ENDBLK']
@@ -1884,6 +1885,7 @@ JunDXFParser >> parseEntities [
 	blocks at: 'INSERT' put: #parseINSERT.
 	blocks at: '3DFACE' put: #parse3DFACE.
 	blocks at: 'TEXT' put: #parseTEXT.
+	blocks at: 'POINT' put: #parsePOINT.
 
 	"definedObjects := OrderedCollection new: 10."
 	"should have parse EXTMIN and EXTMAX by now, so calculate boundingBox"
@@ -2054,6 +2056,41 @@ JunDXFParser >> parseOld [
 			dataString = 'ENTITIES' ifTrue: [self parseEntities]].
 	self showCounts.
 	^self
+]
+
+{ #category : #'parsing entities' }
+JunDXFParser >> parsePOINT [
+
+	"Create point object item.
+	
+	Needed for support of DXF-ASTM specification."
+
+	| x y z newItem beginMark |
+
+	x := y := z := 0.0.
+	self debug: 'parsePOINT ' , dataKey, '->', dataString, ' ', mark printString.
+	beginMark := mark.
+
+	[ 
+		self nextPair.
+		groupCode = 0
+	 ] whileFalse: [ 
+		groupCode = 8 ifTrue: [ layer := dataString ].
+		groupCode = 10 ifTrue: [ x := dataNumber ].
+		groupCode = 20 ifTrue: [ y := dataNumber ].
+		groupCode = 30 ifTrue: [ z := dataNumber ].
+	 ].
+
+	self debug: 'parsePOINT got ' , x printString, ', ', y printString, ', ', z printString.
+	newItem := JunOpenGL3dPoint new 
+		point: x , y , z ;
+		yourself.
+	self unNextPair.
+	newItem mark: beginMark.
+	item := layer -> newItem.
+
+	self count: #point.
+	^ true
 ]
 
 { #category : #'parsing entities' }
