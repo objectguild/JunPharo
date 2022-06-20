@@ -1489,7 +1489,7 @@ JunDXFParser >> initCounts [
 { #category : #'initialize-release' }
 JunDXFParser >> initParser [
 	layers := Dictionary new: 20.
-	dxfNames := Dictionary new: 20.
+	dxfNames := OrderedDictionary new: 20.
 	^self
 ]
 
