@@ -2065,10 +2065,12 @@ JunDXFParser >> parsePOINT [
 	
 	Needed for support of DXF-ASTM specification."
 
-	| x y z newItem beginMark |
+	| x y z thickness angle newItem beginMark |
 
 	x := y := z := 0.0.
 	self debug: 'parsePOINT ' , dataKey, '->', dataString, ' ', mark printString.
+	thickness := 0.
+	angle := 0.
 	beginMark := mark.
 
 	[ 
@@ -2079,11 +2081,15 @@ JunDXFParser >> parsePOINT [
 		groupCode = 10 ifTrue: [ x := dataNumber ].
 		groupCode = 20 ifTrue: [ y := dataNumber ].
 		groupCode = 30 ifTrue: [ z := dataNumber ].
+		groupCode = 39 ifTrue: [ thickness := dataNumber ].
+		groupCode = 50 ifTrue: [ angle := dataNumber ].
 	 ].
 
-	self debug: 'parsePOINT got ' , x printString, ', ', y printString, ', ', z printString.
+	self debug: 'parsePOINT got ' , x printString, ', ', y printString, ', ', z printString , ' thickness: ' , thickness printString , ' angle: ' , angle printString.
 	newItem := JunOpenGL3dPoint new 
 		point: x , y , z ;
+		thickness: thickness ;
+		angle: angle ;
 		yourself.
 	self unNextPair.
 	newItem mark: beginMark.

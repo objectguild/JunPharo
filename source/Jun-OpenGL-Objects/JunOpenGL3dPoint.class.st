@@ -2,10 +2,28 @@ Class {
 	#name : #JunOpenGL3dPoint,
 	#superclass : #JunOpenGL3dPrimitiveObject,
 	#instVars : [
-		'point'
+		'point',
+		'thickness',
+		'angle'
 	],
 	#category : #'Jun-OpenGL-Objects'
 }
+
+{ #category : #accessing }
+JunOpenGL3dPoint >> angle [ 
+
+	"Added to support DXF point entity.
+
+	Angle of the X axis for the User Coordinate System (UCS) in effect when the point was drawn."
+	
+	^ angle
+]
+
+{ #category : #accessing }
+JunOpenGL3dPoint >> angle: aNumber [
+
+	angle := aNumber 
+]
 
 { #category : #enumerating }
 JunOpenGL3dPoint >> geometriesDo: aBlock [
@@ -47,6 +65,18 @@ JunOpenGL3dPoint >> renderOn: aRenderingContext [
 JunOpenGL3dPoint >> reversed [
 
 	^ self copy
+]
+
+{ #category : #accessing }
+JunOpenGL3dPoint >> thickness [ 
+
+	^ thickness 
+]
+
+{ #category : #accessing }
+JunOpenGL3dPoint >> thickness: aNumber [
+
+	thickness := aNumber 
 ]
 
 { #category : #'lisp support' }
