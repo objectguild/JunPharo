@@ -1367,7 +1367,7 @@ JunDXFParser class >> version [
 { #category : #graphics }
 JunDXFParser >> addLayeredItem: anItem [ 
 	| layerName layerItem namedLayer |
-	self debug: 'addLayeredItem ' , anItem key , '->' , anItem value printString.
+	"self debug: 'addLayeredItem ' , anItem key , '->' , anItem value printString."
 	layerName := anItem key.
 	layerItem := anItem value.
 	(layerItem isCompound and: [layerItem components isEmpty])
@@ -1555,7 +1555,7 @@ JunDXFParser >> newDxfDefinition: aString [
 							item value layer: layer.
 							"/Added"
 							definedObjects add: item value]]]].
-	self debug: 'newDxfDefinition now adding: ' , aString , '  for: ' , definedObjects printString.
+	self debug: 'newDxfDefinition adding: ' , aString.
 	self count: #names.
 	newObject := JunOpenGL3dCompoundObject components: definedObjects.
 	newObject name: aString.
@@ -1592,7 +1592,7 @@ JunDXFParser >> parse [
 	[self nextPair.
 	dataString = 'EOF']
 		whileFalse: 
-			[self debug: 'parse: ' , dataKey , '->' , dataString.
+			[self debug: 'parse'.
 			groupCode = 0 ifFalse: [^failBlock value: 'invalid groupcode (not 0)'].
 			dataString = 'SECTION' ifFalse: [^failBlock value: 'invalid section string (not SECTION)'].
 			self nextPair.
@@ -1933,7 +1933,7 @@ JunDXFParser >> parseINSERT [
 	x := y := z := 0.0.
 	extrudeX := extrudeY := extrudeZ := 0.
 	xScale := yScale := zScale := 1.0.
-	self debug: 'parseINSERT  ' , dataKey , ' -> ' , dataString , ' ' , mark printString.
+	self debug: 'parseINSERT'.
 	angle := 0.
 	beginMark := mark.
 	
@@ -1956,7 +1956,7 @@ JunDXFParser >> parseINSERT [
 			groupCode = 42 ifTrue: [yScale := dataNumber].
 			groupCode = 43 ifTrue: [zScale := dataNumber].
 			groupCode = 50 ifTrue: [angle := dataNumber]].
-	self debug: 'parseINSERT got ' , x printString , ' ' , y printString , ' ' , z printString , '  angle: ' , angle printString.
+	self debug: 'parseINSERT got reference: ' , defName , ', x: ' , x printString , ', y: ' , y printString , ', z: ' , z printString , ', angle: ' , angle printString.
 	(dxfNames includesKey: defName)
 		ifFalse: [ ^ failBlock value: 'parseINSERT missing definition name: ' , defName ].
 	newItem := JunOpenGL3dReference object: (dxfNames at: defName).
@@ -2006,7 +2006,7 @@ JunDXFParser >> parseLINE [
 	| x y z x2 y2 z2 color newItem beginMark |
 	x := y := z := 0.0.
 	x2 := y2 := z2 := 0.0.
-	self debug: 'parseLINE ', dataKey, '->', dataString.
+	self debug: 'parseLINE'.
 	color := 0.
 	beginMark := mark.
 	
@@ -2144,7 +2144,7 @@ JunDXFParser >> parsePOLYLINE [
 	newItem mark: beginMark.
 	item := layer -> newItem.
 	self count: #polyline.
-	self debug: 'parsePolyline returning happy ' , vertexes first printString.
+	self debug: ('parsePOLYLINE returning {1} vertices, first: {2}' format: { vertexes size. vertexes first printString }).
 	^true
 ]
 
@@ -2160,7 +2160,7 @@ JunDXFParser >> parseTEXT [
 	x := y := z := 0.0.
 	rotation := 0.0.
 	styleName := 'STANDARD'.
-	self debug: 'parseTEXT ' , dataKey, '->', dataString, ' ', mark printString.
+	self debug: 'parseTEXT'.
 	beginMark := mark.
 
 	[ 
@@ -2246,7 +2246,7 @@ JunDXFParser >> reparse [
 { #category : #graphics }
 JunDXFParser >> setBoundingBox [
 	| b1 b2 |
-	self debug: 'setBoundingBox '.
+	"self debug: 'setBoundingBox '."
 	b1 := self settings at: 'EXTMIN' ifAbsentPut: [nil].
 	b2 := self settings at: 'EXTMAX' ifAbsentPut: [nil].
 	self settings at: 'box' put: nil.
