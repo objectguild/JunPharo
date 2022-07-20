@@ -2068,7 +2068,7 @@ JunDXFParser >> parsePOINT [
 	| x y z thickness angle newItem beginMark |
 
 	x := y := z := 0.0.
-	self debug: 'parsePOINT ' , dataKey, '->', dataString, ' ', mark printString.
+	self debug: 'parsePOINT'.
 	thickness := 0.
 	angle := 0.
 	beginMark := mark.
